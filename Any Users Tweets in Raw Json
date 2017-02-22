@@ -1,0 +1,30 @@
+from os import path
+from tweepy import OAuthHandler
+from tweepy import API
+import pandas as pd
+from tweepy.parsers import RawJsonParser
+
+consumer_key = ''
+consumer_secret=''
+access_token=''
+access_token_secret=''
+
+MAX_TWEETS=500
+auth = OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+
+api = API(auth_handler=auth, parser=RawJsonParser())--Need to Modify the tweepy parsers in file
+
+screen_name='realDonaldTrump'
+
+results = api.user_timeline(screen_name, count= 100)
+
+df = pd.read_json(results)
+                                
+writer = pd.ExcelWriter('pandas_simple.xlsx', engine='xlsxwriter')
+
+df.to_excel(writer, sheet_name='Sheet1')
+
+writer.save()
+
+print df
