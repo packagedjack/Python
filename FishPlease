@@ -1,0 +1,36 @@
+import json
+import requests
+import datetime
+import csv
+import argparse
+import os
+import time
+from datetime import datetime
+import pandas as pd
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+result = []
+URL = 'https://api.groupme.com/v3'
+TOKEN = ''
+params = {}
+counter = 141055961931457390#FirstMessage
+#1572013198
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+while int(counter) < 157196703975514846: #LastMessage
+    params = {'after_id' : counter, 'limit' : 100}
+    uu = URL + '/groups/' + 'agroupnumber' + '/messages' + '?token=atoken'
+    response = requests.get(uu, params=params, verify=False)
+    json_data = json.loads(response.text)
+    lastint = len(json_data['response']['messages'])
+    counter = json_data['response']['messages'][lastint-1]['id']
+    #time.sleep(10)
+    result.append(json_data)
+    print(counter)
+    
+   # counter = msgs.content.response.messages[msgs.json().response.messages.length-1].id
+
+# if you encounter a "year is out of range" error the timestamp
+# may be in milliseconds, try `ts /= 1000` in that case
+
+ 
+with open("merged_file.json", "w", encoding="utf8") as outfile:
+     json.dump(result, outfile)
